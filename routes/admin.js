@@ -1,12 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var admin = require('../models/admin');
+var md5 = require('md5');
 
 router.post('/create', async function (req, res) {
     try {
         let data = new admin({
             user: req.body.user,
-            password: req.body.password,
+            password: md5(req.body.password),
             created_at: Date.now(),
         })
 
@@ -20,13 +21,13 @@ router.post('/create', async function (req, res) {
 
 router.post('/login', async function (req, res) {
     try {
-        let data = await admin.findOne({ user: req.body.user, password: req.body.password, })
+        let data = await admin.findOne({ user: req.body.user, password: md5(req.body.password), })
         if (data != null) {
             console.log(data)
-            res.send({ status: 'OK', message: 'create role success', data: data })
+            res.send({ status: 'OK', message: 'success', data: data })
         } else {
             console.log(data)
-            res.send({ status: 'Fail', message: 'create role success', data: data })
+            res.send({ status: 'Fail', message: 'error', data: data })
         }
     } catch (error) {
         console.log(error);
