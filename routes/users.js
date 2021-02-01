@@ -4,6 +4,7 @@ var Users = require('../models/users')
 var Rooms = require('../models/rooms');
 var Roles = require('../models/roles');
 var Sessionuser = require('../models/session_user');
+var admin = require('../models/admin');
 const Onebox = require('../models/onebox')
 var crypto = require("crypto");
 var md5 = require('md5');
@@ -31,8 +32,18 @@ router.get('/data', async function (req, res) {
 router.put('/updatestatus', async function (req, res) {
   try {
     let user = await Users.findById(req.body._id)
+    let data_A = await admin.find({ user: user.username })
     user.role = req.body.role
     await user.save()
+    if (user.role == "5f745623a8f2954ddca7b278" && data_A == "") {
+      let create = new admin({
+        user: user.username,
+        created_at: Date.now(),
+      })
+      await create.save()
+    } else if (user.role != "5f745623a8f2954ddca7b278" && data_A != "") {
+      await admin.findByIdAndRemove({ user: user.username })
+    }
     res.send({ status: 'success', message: 'Data User', data: user })
   } catch (error) {
     console.log(error);

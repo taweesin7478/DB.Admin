@@ -22,11 +22,10 @@ const votes_mg = require('./routes/votes')
 const votes = require('./routes/votes_jitsi')
 const onechatroom = require('./routes/OnechatRoom')
 const onebox = require('./routes/onebox')
-const otp = require('./routes/OTP')
-// const genclientIdRouter = require('./routes/gen_clientId')
-// const onemailRouter = require('./service/sync_services')
-const History_rooms = require('./routes/History_rooms')
 const admin = require('./routes/admin')
+const otp = require('./routes/OTP')
+const History_rooms = require('./routes/History_rooms')
+
 var app = express();
 
 // view engine setup
@@ -58,25 +57,16 @@ if (process.env.NODE_ENV == 'development') {
   app.use('/api/onechatroom', onechatroom)
   app.use('/api/synconeid', synconeid)
   app.use('/api/onebox', onebox)
+  app.use('/api/admin', admin)
   app.use('/api/otp', otp)
   app.use('/api/History_rooms', History_rooms)
-  app.use('/api/admin', admin)
+
 } else {
   //use api route
-  app.use('/backend/api/users', usersRouter);
-  app.use('/backend/api/roles', rolesRouter);
-  app.use('/backend/api/rooms', roomsRouter);
-  app.use('/backend/api/auth', loginRouter);
-  app.use('/backend/api/feedback', feedbacksRouter);
-  app.use('/backend/api/avatar', upload_photoRouter);
-  app.use('/backend/api/votes', votes)
-  app.use('/backend/api/votes_manage', votes_mg)
-  app.use('/api/onechatroom', onechatroom)
-  app.use('/backend/api/synconeid', synconeid)
-  app.use('/backend/api/onebox', onebox)
-  app.use('/backend/api/otp', otp)
-  app.use('/backend/api/History_rooms', History_rooms)
-  app.use('/backend/api/admin', admin)
+  app.use('/', indexRouter);
+  app.use('/api/users', usersRouter);
+  app.use('/api/roles', rolesRouter);
+  app.use('/api/admin', admin)
 }
 
 // catch 404 and forward to error handler

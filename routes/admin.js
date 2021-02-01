@@ -23,10 +23,8 @@ router.post('/login', async function (req, res) {
     try {
         let data = await admin.findOne({ user: req.body.user, password: md5(req.body.password), })
         if (data != null) {
-            console.log(data)
             res.send({ status: 'OK', message: 'success', data: data })
         } else {
-            console.log(data)
             res.send({ status: 'Fail', message: 'error', data: data })
         }
     } catch (error) {

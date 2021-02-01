@@ -5,8 +5,7 @@ var History_rooms = require('../models/history_rooms');
 router.get('/data', async function (req, res) {
   try {
     let data = await History_rooms.find()
-
-    res.send({ status: 'success', message: 'success', data: data })
+    res.send({ status: 'success', message: 'Data', data: data })
   } catch (error) {
     console.log(error);
     res.send(error)
