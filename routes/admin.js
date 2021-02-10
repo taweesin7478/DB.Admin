@@ -8,6 +8,7 @@ router.post('/create', async function (req, res) {
         let data = new admin({
             user: req.body.user,
             password: md5(req.body.password),
+            No_limit: false,
             created_at: Date.now(),
         })
 

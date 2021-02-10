@@ -155,7 +155,7 @@ router.post('/registeroneid', async function (req, res) {
           created_at: Date.now(),
           updated_at: Date.now(),
         })
-        async function checkUidroom() { // check uid room duplicate
+        async function checkUidroom () { // check uid room duplicate
           let uid = user.name.substr(0, 3) + '-' + crypto.randomBytes(2).toString('hex') + '-' + crypto.randomBytes(2).toString('hex')
           let checkuid = await Rooms.findOne({ 'uid': uid })
           return checkuid ? checkUidroom() : uid;
