@@ -1,0 +1,38 @@
+const mongoose = require('mongoose')
+
+var Schema = new mongoose.Schema({
+    // id : { type:String,unique: true,min: 1 },
+    // username: { type: String, default: '' },
+    // email: { type: String, unique: true, default: '', required: true, },
+    // name: { type: String, default: '', required: true },
+    // lastname: { type: String, default: '', required: true },
+    // phonenumber: { type: String, default: '', minlength: 10, maxlength: 10, required: true, },
+    // company: { type: String, default: '', required: true },
+    // oneid: { type: String, default: '' },
+    // room_id: { type: String, default: '', required: true, },
+    // role: { type: String, default: '', required: true, },
+    // avatar_profile: { type: String, default: '' },
+    // verifyemail: { type: Boolean, default: '' },
+    // license: { type: Date, default: '' },
+    // created_at: { type: Date, default: '' },
+    // updated_at: { type: Date, default: '' },
+    _id: { type: String, default: '' },
+    username: { type: String, default: '' },
+    email: { type: String, unique: true, default: '', required: true, },
+    name: { type: String, default: '', required: true },
+    lastname: { type: String, default: '', required: true },
+    phonenumber: { type: String, default: '', minlength: 10, maxlength: 10, required: true, },
+    company: { type: String, default: '', required: true },
+    oneid: { type: String, default: null, },
+    room_id: { type: String, default: '', required: true, },
+    role: { type: String, default: '', required: true, },
+    avatar_profile: { type: String, default: null, },
+    verifyemail: { type: Boolean, default: false },
+    license: { type: Date, default: '' },
+    limit: { type: String, default: '' },
+    created_at: { type: Date, default: Date.now() },
+    updated_at: { type: Date, default: Date.now() },
+    __v: { type: String, default: '' },
+}, { collection: 'remove' })
+
+module.exports = mongoose.model('remove', Schema)

@@ -29,6 +29,21 @@ router.get('/data', async function (req, res) {
   }
 });
 
+router.post('/search', async function (req, res) {
+  try {
+    let search = await Users.findOne({ username: req.body.username, email: req.body.email })
+    // res.send({ status: 'success', message: 'Data search', data: search })
+    if (search != null) {
+      res.send({ status: 'OK', message: 'success', data: search })
+    } else {
+      res.send({ status: 'Fail', message: 'error', data: search })
+    }
+  } catch (error) {
+    console.log(error);
+    res.send(error)
+  }
+});
+
 router.put('/updatestatus', async function (req, res) {
   try {
     let user = await Users.findById(req.body._id)
@@ -38,7 +53,7 @@ router.put('/updatestatus', async function (req, res) {
     if (user.role == "5f745623a8f2954ddca7b278" && data_A == "") {
       let create = new admin({
         user: user.username,
-        created_at: Date.now(),
+        updated_at: Date.now(),
       })
       await create.save()
     } else if (user.role != "5f745623a8f2954ddca7b278" && data_A != "") {

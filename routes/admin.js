@@ -3,6 +3,28 @@ var router = express.Router();
 var admin = require('../models/admin');
 var md5 = require('md5');
 
+router.get('/data', async function (req, res) {
+    try {
+        let data = await admin.find()
+        res.send({ status: 'success', message: 'Data', data: data })
+    } catch (error) {
+        console.log(error);
+        res.send(error)
+    }
+});
+
+router.put('/update', async function (req, res) {
+    try {
+        let data_A = await admin.findById(req.body._id)
+        data_A.No_limit = req.body.No_limit
+        await data_A.save()
+        res.send({ status: 'success', message: 'Data', data: data_A })
+    } catch (error) {
+        console.log(error);
+        res.send(error)
+    }
+});
+
 router.post('/create', async function (req, res) {
     try {
         let data = new admin({
@@ -11,7 +33,6 @@ router.post('/create', async function (req, res) {
             No_limit: false,
             created_at: Date.now(),
         })
-
         await data.save()
         res.send({ status: 'success', message: 'create role success', data: data })
     } catch (error) {
