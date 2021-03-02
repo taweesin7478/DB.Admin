@@ -1,7 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var removes = require('../models/remove');
-var Users = require('../models/users')
+var Users = require('../models/users');
+var Sessionroom = require('../models/session_room');
+var Sessionuser = require('../models/session_user');
+var rooms = require('../models/rooms')
+var onebox = require('../service/onebox')
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -64,8 +68,25 @@ router.post('/restore', async function (req, res) {
 router.post('/delete', async function (req, res) {
     try {
         let del = await removes.findOne({ username: req.body.username, email: req.body.email })
+        let ssr = await Sessionroom.findOne({ oneid: del.oneid })
+        let ssu = await Sessionuser.findOne({ user_id: del._id })
+        let room = await rooms.findOne({ user_id: del._id })
+        let oneb = await onebox.findOne({ oneid: del.oneid })
+
         if (del) {
             await del.delete()
+            if (ssr) {
+                await ssr.delete()
+            }
+            if (ssu) {
+                await ssu.delete()
+            }
+            if (room) {
+                await room.delete()
+            }
+            if (oneb) {
+                await oneb.delete()
+            }
             res.send({ status: 'OK', message: 'delete success' })
         } else {
             res.send({ status: 'error', message: 'Not data' })
