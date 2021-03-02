@@ -25,6 +25,7 @@ const onebox = require('./routes/onebox')
 const admin = require('./routes/admin')
 const otp = require('./routes/OTP')
 const History_rooms = require('./routes/History_rooms')
+const remove = require('./routes/remove')
 
 var app = express();
 
@@ -46,27 +47,27 @@ app.get('/image/profile/:user_id', async function (req, res) {
 if (process.env.NODE_ENV == 'development') {
   //use api route
   app.use('/', indexRouter);
-  app.use('/api/users', usersRouter);
-  app.use('/api/roles', rolesRouter);
-  app.use('/api/rooms', roomsRouter);
-  app.use('/api/auth', loginRouter);
-  app.use('/api/feedback', feedbacksRouter);
-  app.use('/api/avatar', upload_photoRouter);
-  app.use('/api/votes', votes)
-  app.use('/api/votes_manage', votes_mg)
-  app.use('/api/onechatroom', onechatroom)
-  app.use('/api/synconeid', synconeid)
-  app.use('/api/onebox', onebox)
-  app.use('/api/admin', admin)
-  app.use('/api/otp', otp)
-  app.use('/api/History_rooms', History_rooms)
-
+  app.use('/secret/api/users', usersRouter);
+  app.use('/secret/api/roles', rolesRouter);
+  app.use('/secret/api/rooms', roomsRouter);
+  app.use('/secret/api/auth', loginRouter);
+  app.use('/secret/api/feedback', feedbacksRouter);
+  app.use('/secret/api/avatar', upload_photoRouter);
+  app.use('/secret/api/votes', votes)
+  app.use('/secret/api/votes_manage', votes_mg)
+  app.use('/secret/api/onechatroom', onechatroom)
+  app.use('/secret/api/synconeid', synconeid)
+  app.use('/secret/api/onebox', onebox)
+  app.use('/secret/api/admin', admin)
+  app.use('/secret/api/otp', otp)
+  app.use('/secret/api/History_rooms', History_rooms)
+  app.use('/secret/api/remove', remove)
 } else {
   //use api route
   app.use('/', indexRouter);
-  app.use('/api/users', usersRouter);
-  app.use('/api/roles', rolesRouter);
-  app.use('/api/admin', admin)
+  app.use('/secret/api/users', usersRouter);
+  app.use('/secret/api/roles', rolesRouter);
+  app.use('/secret/api/admin', admin)
 }
 
 // catch 404 and forward to error handler
