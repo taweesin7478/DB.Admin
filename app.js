@@ -67,8 +67,8 @@ if (process.env.NODE_ENV == 'development') {
   app.use('/', indexRouter);
   app.use('/secret/api/users', usersRouter);
   app.use('/secret/api/roles', rolesRouter);
-  app.use('/secret/api/admin', admin)
   app.use('/secret/api/remove', remove)
+  app.use('/secret/api/admin', admin)
 }
 
 // catch 404 and forward to error handler

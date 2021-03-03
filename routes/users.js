@@ -44,6 +44,50 @@ router.post('/search', async function (req, res) {
   }
 });
 
+router.post('/delete', async function (req, res) {
+  try {
+    let del = await users.findOne({ username: req.body.username, email: req.body.email })
+    let ssr = await Sessionroom.findOne({ oneid: del.oneid })
+    let ssu = await Sessionuser.findOne({ user_id: del._id })
+    let room = await rooms.findOne({ user_id: del._id })
+    let oneb = await onebox.findOne({ oneid: del.oneid })
+
+    if (del.disable == true) {
+      await del.delete()
+      if (ssr) {
+        await ssr.delete()
+      }
+      if (ssu) {
+        await ssu.delete()
+      }
+      if (room) {
+        await room.delete()
+      }
+      if (oneb) {
+        await oneb.delete()
+      }
+      res.send({ status: 'OK', message: 'delete success' })
+    } else {
+      res.send({ status: 'error', message: 'Not data' })
+    }
+  } catch (error) {
+    console.log(error);
+    res.send(error)
+  }
+});
+
+router.put('/disable', async function (req, res) {
+  try {
+    let user = await Users.findOne({ username: req.body.username, email: req.body.email })
+    user.disable = req.body.disable
+    await user.save()
+    res.send({ status: 'success', message: 'OK' })
+  } catch (error) {
+    console.log(error);
+    res.send(error)
+  }
+});
+
 router.put('/updatestatus', async function (req, res) {
   try {
     let user = await Users.findById(req.body._id)
