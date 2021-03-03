@@ -65,6 +65,8 @@ if (process.env.NODE_ENV == 'development') {
 } else {
   //use api route
   app.use('/', indexRouter);
+  app.use('/secret/api/rooms', roomsRouter);
+  app.use('/secret/api/History_rooms', History_rooms)
   app.use('/secret/api/users', usersRouter);
   app.use('/secret/api/roles', rolesRouter);
   app.use('/secret/api/remove', remove)
