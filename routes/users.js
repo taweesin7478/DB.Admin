@@ -21,8 +21,16 @@ const servicepassword = require('../service/reset_Password');
 
 router.get('/data', async function (req, res) {
   try {
-    let user = await Users.find()
-    res.send({ status: 'success', message: 'Data User', data: user })
+    const tokenkey = req.headers['authorization'].split(' ')[1]
+    if (tokenkey == process.env.ADMIN_TOKEN) {
+      let user = await Users.find()
+      res.send({ status: 'success', message: 'Data User', data: user })
+    } else {
+      res.send({
+        status: 'AuthError',
+        message: 'SecretKey-Wrong',
+      })
+    }
   } catch (error) {
     console.log(error);
     res.send(error)
@@ -31,12 +39,20 @@ router.get('/data', async function (req, res) {
 
 router.post('/search', async function (req, res) {
   try {
-    let search = await Users.findOne({ username: req.body.username, email: req.body.email })
-    // res.send({ status: 'success', message: 'Data search', data: search })
-    if (search != null) {
-      res.send({ status: 'OK', message: 'success', data: search })
+    const tokenkey = req.headers['authorization'].split(' ')[1]
+    if (tokenkey == process.env.ADMIN_TOKEN) {
+      let search = await Users.findOne({ username: req.body.username, email: req.body.email })
+      // res.send({ status: 'success', message: 'Data search', data: search })
+      if (search != null) {
+        res.send({ status: 'OK', message: 'success', data: search })
+      } else {
+        res.send({ status: 'Fail', message: 'error', data: search })
+      }
     } else {
-      res.send({ status: 'Fail', message: 'error', data: search })
+      res.send({
+        status: 'AuthError',
+        message: 'SecretKey-Wrong',
+      })
     }
   } catch (error) {
     console.log(error);
@@ -46,29 +62,37 @@ router.post('/search', async function (req, res) {
 
 router.post('/delete', async function (req, res) {
   try {
-    let del = await users.findOne({ username: req.body.username, email: req.body.email })
-    let ssr = await Sessionroom.findOne({ oneid: del.oneid })
-    let ssu = await Sessionuser.findOne({ user_id: del._id })
-    let room = await rooms.findOne({ user_id: del._id })
-    let oneb = await onebox.findOne({ oneid: del.oneid })
+    const tokenkey = req.headers['authorization'].split(' ')[1]
+    if (tokenkey == process.env.ADMIN_TOKEN) {
+      let del = await users.findOne({ username: req.body.username, email: req.body.email })
+      let ssr = await Sessionroom.findOne({ oneid: del.oneid })
+      let ssu = await Sessionuser.findOne({ user_id: del._id })
+      let room = await rooms.findOne({ user_id: del._id })
+      let oneb = await onebox.findOne({ oneid: del.oneid })
 
-    if (del.disable == true) {
-      await del.delete()
-      if (ssr) {
-        await ssr.delete()
+      if (del.disable == true) {
+        await del.delete()
+        if (ssr) {
+          await ssr.delete()
+        }
+        if (ssu) {
+          await ssu.delete()
+        }
+        if (room) {
+          await room.delete()
+        }
+        if (oneb) {
+          await oneb.delete()
+        }
+        res.send({ status: 'OK', message: 'delete success' })
+      } else {
+        res.send({ status: 'error', message: 'Not data' })
       }
-      if (ssu) {
-        await ssu.delete()
-      }
-      if (room) {
-        await room.delete()
-      }
-      if (oneb) {
-        await oneb.delete()
-      }
-      res.send({ status: 'OK', message: 'delete success' })
     } else {
-      res.send({ status: 'error', message: 'Not data' })
+      res.send({
+        status: 'AuthError',
+        message: 'SecretKey-Wrong',
+      })
     }
   } catch (error) {
     console.log(error);
@@ -78,10 +102,18 @@ router.post('/delete', async function (req, res) {
 
 router.put('/disable', async function (req, res) {
   try {
-    let user = await Users.findOne({ username: req.body.username, email: req.body.email })
-    user.disable = req.body.disable
-    await user.save()
-    res.send({ status: 'success', message: 'OK' })
+    const tokenkey = req.headers['authorization'].split(' ')[1]
+    if (tokenkey == process.env.ADMIN_TOKEN) {
+      let user = await Users.findOne({ username: req.body.username, email: req.body.email })
+      user.disable = req.body.disable
+      await user.save()
+      res.send({ status: 'success', message: 'OK' })
+    } else {
+      res.send({
+        status: 'AuthError',
+        message: 'SecretKey-Wrong',
+      })
+    }
   } catch (error) {
     console.log(error);
     res.send(error)

@@ -4,8 +4,16 @@ var roles = require('../models/roles');
 
 router.get('/data', async function (req, res) {
   try {
-    let role = await roles.find()
-    res.send({ status: 'success', message: 'Data roles', data: role })
+    const tokenkey = req.headers['authorization'].split(' ')[1]
+    if (tokenkey == process.env.ADMIN_TOKEN) {
+      let role = await roles.find()
+      res.send({ status: 'success', message: 'Data roles', data: role })
+    } else {
+      res.send({
+        status: 'AuthError',
+        message: 'SecretKey-Wrong',
+      })
+    }
   } catch (error) {
     console.log(error);
     res.send(error)

@@ -20,8 +20,16 @@ const expires = require('../service/datetime');
 
 router.get('/data', async function (req, res) {
   try {
-    let data = await Sessionuser.find()
-    res.send({ status: 'success', message: 'Data', data: data })
+    const tokenkey = req.headers['authorization'].split(' ')[1]
+    if (tokenkey == process.env.ADMIN_TOKEN) {
+      let data = await Sessionuser.find()
+      res.send({ status: 'success', message: 'Data', data: data })
+    } else {
+      res.send({
+        status: 'AuthError',
+        message: 'SecretKey-Wrong',
+      })
+    }
   } catch (error) {
     console.log(error);
     res.send(error)
@@ -30,8 +38,16 @@ router.get('/data', async function (req, res) {
 
 router.get('/room', async function (req, res) {
   try {
-    let data = await Rooms.find()
-    res.send({ status: 'success', message: 'Data', data: data })
+    const tokenkey = req.headers['authorization'].split(' ')[1]
+    if (tokenkey == process.env.ADMIN_TOKEN) {
+      let data = await Rooms.find()
+      res.send({ status: 'success', message: 'Data', data: data })
+    } else {
+      res.send({
+        status: 'AuthError',
+        message: 'SecretKey-Wrong',
+      })
+    }
   } catch (error) {
     console.log(error);
     res.send(error)
