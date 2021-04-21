@@ -17,12 +17,17 @@ const { loggers } = require('winston');
 const sendMail = require('../service/sendemail');
 const cron = require('node-cron');
 const expires = require('../service/datetime');
+const { encode, decode } = require("../service/hashcode");
 
 router.get('/data', async function (req, res) {
   try {
     const tokenkey = req.headers['authorization'].split(' ')[1]
     if (tokenkey == process.env.ADMIN_TOKEN) {
       let data = await Sessionuser.find()
+      for (let i = 0; i < data.length; i++) {
+        data[i].username = decode(data[i].username)
+        data[i].email = decode(data[i].email)
+      }
       res.send({ status: 'success', message: 'Data', data: data })
     } else {
       res.send({

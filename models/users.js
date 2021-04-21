@@ -6,7 +6,7 @@ var Schema = new mongoose.Schema({
     email: { type: String, unique: true, default: '', required: true, unique: true },
     name: { type: String, default: '', required: true },
     lastname: { type: String, default: '', required: true },
-    phonenumber: { type: String, default: '', minlength: 10, maxlength: 10, },
+    phonenumber: { type: String, default: '' },
     company: { type: String, default: '', required: true },
     oneid: { type: String, default: null, unique: true },
     room_id: { type: String, default: '', required: true, },

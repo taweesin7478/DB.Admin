@@ -7,6 +7,7 @@ var Sessionuser = require('../models/session_user');
 var admin = require('../models/admin');
 const Onebox = require('../models/onebox')
 var crypto = require("crypto");
+const { encode, decode } = require("../service/hashcode");
 var md5 = require('md5');
 const verifyToken = require('../service/verifyToken')
 const jwt = require('jsonwebtoken');
@@ -24,6 +25,14 @@ router.get('/data', async function (req, res) {
     const tokenkey = req.headers['authorization'].split(' ')[1]
     if (tokenkey == process.env.ADMIN_TOKEN) {
       let user = await Users.find()
+      for (let i = 0; i < user.length; i++) {
+        user[i].username = decode(user[i].username)
+        user[i].email = decode(user[i].email)
+        user[i].name = decode(user[i].name)
+        user[i].lastname = decode(user[i].lastname)
+        user[i].phonenumber = decode(user[i].phonenumber)
+        user[i].company = decode(user[i].company)
+      }
       res.send({ status: 'success', message: 'Data User', data: user })
     } else {
       res.send({
@@ -104,7 +113,7 @@ router.put('/disable', async function (req, res) {
   try {
     const tokenkey = req.headers['authorization'].split(' ')[1]
     if (tokenkey == process.env.ADMIN_TOKEN) {
-      let user = await Users.findOne({ username: req.body.username, email: req.body.email })
+      let user = await Users.findOne({ username: encode(req.body.username), email: encode(req.body.email) })
       user.disable = req.body.disable
       await user.save()
       res.send({ status: 'success', message: 'OK' })
