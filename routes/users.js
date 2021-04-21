@@ -50,7 +50,7 @@ router.post('/search', async function (req, res) {
   try {
     const tokenkey = req.headers['authorization'].split(' ')[1]
     if (tokenkey == process.env.ADMIN_TOKEN) {
-      let search = await Users.findOne({ username: req.body.username, email: req.body.email })
+      let search = await Users.findOne({ username: encode(req.body.username), email: encode(req.body.email) })
       // res.send({ status: 'success', message: 'Data search', data: search })
       if (search != null) {
         res.send({ status: 'OK', message: 'success', data: search })
@@ -73,7 +73,7 @@ router.post('/delete', async function (req, res) {
   try {
     const tokenkey = req.headers['authorization'].split(' ')[1]
     if (tokenkey == process.env.ADMIN_TOKEN) {
-      let del = await users.findOne({ username: req.body.username, email: req.body.email })
+      let del = await users.findOne({ username: encode(req.body.username), email: encode(req.body.email) })
       let ssr = await Sessionroom.findOne({ oneid: del.oneid })
       let ssu = await Sessionuser.findOne({ user_id: del._id })
       let room = await rooms.findOne({ user_id: del._id })
